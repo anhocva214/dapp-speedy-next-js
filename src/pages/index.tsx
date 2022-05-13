@@ -4,6 +4,10 @@ import { userActions, userSelector } from '@redux/user.redux'
 import { CircleSpinner, ClapSpinner } from 'react-spinners-kit'
 import { Img } from 'src/resources/img'
 import LogoImage from '@components/header/logo-image'
+import SidebarMenuItem from '@components/sidebar/menu-item'
+import Siderbar from '@components/sidebar'
+import Image from 'next/image'
+import CardProduct from '@components/card/card-product'
 
 
 export default function Home() {
@@ -42,7 +46,8 @@ export default function Home() {
 
                 <div className='flex shadow-900 w-full max-w-[800px] shadow-xl rounded-md overflow-hidden'>
                   <input type="text" className='w-full outline-0 p-4' placeholder='Tìm kiếm sản phẩm của bạn' />
-                  <button className="bg-emerald-500 text-white font-semibold py-2 w-44" >
+                  <button className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 w-44 flex items-center gap-2 justify-center transition-all duration-300" >
+                    <i className="fa-regular fa-magnifying-glass"></i>
                     Tìm kiếm
                   </button>
                 </div>
@@ -66,16 +71,24 @@ export default function Home() {
           </div>
         </section>
         <hr />
-        <section className='bg-gray-100'>
+        <section className='bg-gray-100 '>
           <div className="grid grid-cols-12">
-              <div className="col-span-2">
-                  <div>
-                    
-                  </div>
+            <div className="col-span-2 h-screen sticky top-0">
+              <div className="bg-white px-5 py-8">
+                <Siderbar />
               </div>
-              <div className="col-span-10">
-
+            </div>
+            <div className="col-span-10">
+              <div className="p-8">
+                <div className="grid grid-cols-5 gap-4">
+                  {"11111111111111111111111111111111111111111111111111111111111111111111".split("").map((item, index) => (
+                    <div key={index} className="col-span-1">
+                      <CardProduct />
+                    </div>
+                  ))}
+                </div>
               </div>
+            </div>
           </div>
         </section>
       </main>
