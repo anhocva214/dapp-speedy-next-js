@@ -8,6 +8,8 @@ import SidebarMenuItem from '@components/sidebar/menu-item'
 import Siderbar from '@components/sidebar'
 import Image from 'next/image'
 import CardProduct from '@components/card/card-product'
+import CartSidebar from '@components/cart/cart-sidebar'
+import { settingActions } from '@redux/setting.redux'
 
 
 export default function Home() {
@@ -37,7 +39,7 @@ export default function Home() {
         </div>
       </header>
 
-      <a role="button" className="flex bg-emerald-500 p-3 w-fit gap-2 justify-center items-center flex-col rounded-l-md fixed z-40 top-1/2 right-0 transition-all duration-300 hover:bg-emerald-600">
+      <a onClick={() => dispatch(settingActions.openCartSidebar())} role="button" className="flex bg-emerald-500 p-3 w-fit gap-2 justify-center items-center flex-col rounded-l-md fixed z-40 top-1/2 right-0 transition-all duration-300 hover:bg-emerald-600">
         <span className="text-sm w-full flex justify-between items-center gap-2 text-white font-medium" >
           <i className="fa-solid fa-basket-shopping-simple"></i> 3 items
         </span>
@@ -47,7 +49,7 @@ export default function Home() {
       </a>
 
       {/* Cart */}
-      
+      <CartSidebar/>
 
       <main>
         <section className=''  >
@@ -85,14 +87,14 @@ export default function Home() {
         <hr />
         <section className='bg-gray-100 '>
           <div className="grid grid-cols-12">
-            <div className="col-span-2 h-screen sticky top-0">
+            {/* <div className="col-span-2 h-screen sticky top-0">
               <div className="bg-white px-5 py-8">
                 <Siderbar />
               </div>
-            </div>
-            <div className="col-span-10">
+            </div> */}
+            <div className="col-span-full">
               <div className="p-8">
-                <div className="grid grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                   {"111111111111".split("").map((item, index) => (
                     <div key={index} className="col-span-1">
                       <CardProduct />

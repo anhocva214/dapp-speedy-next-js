@@ -1,10 +1,15 @@
+import { settingActions, settingSelector } from "@redux/setting.redux";
+import { useDispatch, useSelector } from "react-redux";
+import CartItem from "./cart-item";
 
 
 export default function CartSidebar() {
+    const dispatch = useDispatch()
+    const {cartSidebarToggle} = useSelector(settingSelector)
 
     return (
         <>
-            <div className="fixed z-50 top-0 right-0 w-[450px] h-screen bg-white flex flex-col justify-between ">
+            <div className={`fixed z-50 top-0 w-[450px] h-screen bg-white flex flex-col justify-between transition-all duration-300 ${cartSidebarToggle?'right-0':'-right-full'}`}>
                 {/* Cart header */}
                 <div className="h-16 border-b flex items-center px-5">
                     <span className="w-full flex items-center gap-2 font-medium text-emerald-600" >
@@ -15,8 +20,10 @@ export default function CartSidebar() {
                     </a>
                 </div>
                 {/* Cart content */}
-                <div className='h-full px-5 mb-5 overflow-y-auto'>
-
+                <div className='h-full mb-5 overflow-y-auto'>
+                    <div className='py-3 border-b px-5'>
+                        <CartItem/>
+                    </div>
                 </div>
                 {/* Cart footer */}
                 <div className="px-5 pb-5">
@@ -26,7 +33,9 @@ export default function CartSidebar() {
                 </div>
             </div>
 
-            <div className="fixed z-40 top-0 left-0 w-screen h-screen bg-black/50" ></div>
+            <div onClick={()=>{
+                dispatch(settingActions.closeCartSidebar())
+            }} className={`fixed top-0 left-0 w-screen h-screen transition-all duration-300 z-40 ${cartSidebarToggle?' bg-black/50 visible':' bg-transparent invisible'}`} ></div>
         </>
     )
 }
