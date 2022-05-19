@@ -39,6 +39,9 @@
       ],
       "@apis/*": [
         "./src/apis/*"
+      ],
+      "@resources/*": [
+        "./src/resources/*"
       ]
     }
   },

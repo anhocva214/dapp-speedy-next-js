@@ -10,6 +10,7 @@ import Image from 'next/image'
 import CardProduct from '@components/card/card-product'
 import CartSidebar from '@components/cart/cart-sidebar'
 import { settingActions } from '@redux/setting.redux'
+import ProductDataMock from '@resources/mock/products.mock.json'
 
 
 export default function Home() {
@@ -95,9 +96,13 @@ export default function Home() {
             <div className="col-span-full">
               <div className="p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                  {"111111111111".split("").map((item, index) => (
+                  {ProductDataMock.map((product, index)=>(
                     <div key={index} className="col-span-1">
-                      <CardProduct />
+                      <CardProduct
+                        name={product.name}
+                        imageUrl={product.imageUrl}
+                        price={product.price}
+                      />
                     </div>
                   ))}
                 </div>

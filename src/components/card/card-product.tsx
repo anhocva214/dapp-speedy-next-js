@@ -1,13 +1,18 @@
 import Image from "next/image";
 
+interface IProps{
+    name: string;
+    imageUrl: string;
+    price: number;
+}
 
-export default function CardProduct() {
+export default function CardProduct(props: IProps) {
 
     return (
         <div className="w-full bg-white flex flex-col items-center border rounded-md">
             <a role={'button'} className="my-10">
                 <Image
-                    src='https://suckhoedoisong.qltns.mediacdn.vn/Images/nguyenkhanh/2020/09/07/ca_rot_vi_thuoc_chua_2.jpg'
+                    src={props.imageUrl}
                     width={200}
                     height={200}
                 />
@@ -16,11 +21,11 @@ export default function CardProduct() {
                 <div className="w-full flex gap-2">
                     <span className="flex gap-1 items-center text-lg">
                         <i className="fa-solid fa-coin-vertical"></i>
-                        <strong>100</strong>
+                        <strong>{props.price}</strong>
                     </span>
                 </div>
                 <div className="w-full py-2">
-                    <h4 className="font-semibold text-zinc-500">Carot</h4>
+                    <h4 className="font-semibold text-zinc-500">{props.name}</h4>
                 </div>
                 <div className="w-full">
                     <button className="w-full flex rounded-md overflow-hidden group outline-0">
