@@ -37,6 +37,18 @@ export default function Home() {
         </div>
       </header>
 
+      <a role="button" className="flex bg-emerald-500 p-3 w-fit gap-2 justify-center items-center flex-col rounded-l-md fixed z-40 top-1/2 right-0 transition-all duration-300 hover:bg-emerald-600">
+        <span className="text-sm w-full flex justify-between items-center gap-2 text-white font-medium" >
+          <i className="fa-solid fa-basket-shopping-simple"></i> 3 items
+        </span>
+        <span className="bg-white p-2 text-sm text-emerald-600 rounded-md w-full flex justify-center items-center gap-1">
+          <i className="fa-solid fa-coin-vertical"></i> 9.00
+        </span>
+      </a>
+
+      {/* Cart */}
+      
+
       <main>
         <section className=''  >
           <div className="container">
@@ -81,13 +93,14 @@ export default function Home() {
             <div className="col-span-10">
               <div className="p-8">
                 <div className="grid grid-cols-5 gap-4">
-                  {"11111111111111111111111111111111111111111111111111111111111111111111".split("").map((item, index) => (
+                  {"111111111111".split("").map((item, index) => (
                     <div key={index} className="col-span-1">
                       <CardProduct />
                     </div>
                   ))}
                 </div>
               </div>
+
             </div>
           </div>
         </section>
