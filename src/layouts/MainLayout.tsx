@@ -1,5 +1,9 @@
 import LogoImage from '@components/header/logo-image';
-import React, { ReactNode } from 'react';
+import { userActions, userSelector } from '@redux/user.redux';
+import { routes } from '@utils/routes';
+import { useRouter } from 'next/router';
+import React, { ReactNode, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 type props = {
     children: ReactNode
@@ -7,6 +11,14 @@ type props = {
 
 
 const MainLayout = (props: props) => {
+    const router = useRouter()
+    const dispatch = useDispatch()
+
+    const { authenticated, user } = useSelector(userSelector)
+
+    useEffect(() => {
+        dispatch(userActions.authenticate())
+    }, [])
 
     return (
         <>
@@ -20,18 +32,23 @@ const MainLayout = (props: props) => {
                             <a href="#" className="text-lg" >
                                 <span>Liên hệ</span>
                             </a>
-                            <button className="bg-emerald-500 text-white font-semibold py-2 px-4 rounded-md" >
-                                Đăng nhập
-                            </button>
-                            <button className="bg-white rounded-full" >
-                                <i className="fa-light fa-circle-user text-4xl text-emerald-500 bg-white"></i>
-                            </button>
+                            {authenticated ? (
+                                <button className="bg-white rounded-full" >
+                                    <i className="fa-light fa-circle-user text-4xl text-emerald-500 bg-white"></i>
+                                </button>
+                            ) : (
+                                <button onClick={() => router.push(routes.login)} className="bg-emerald-500 text-white font-semibold py-2 px-4 rounded-md" >
+                                    Đăng nhập
+                                </button>
+                            )}
+
+
                         </nav>
                     </div>
                 </div>
             </header>
             {props.children}
-            
+
         </>
     )
 
