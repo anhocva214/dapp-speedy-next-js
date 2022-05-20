@@ -11,6 +11,7 @@ import CardProduct from '@components/card/card-product'
 import CartSidebar from '@components/cart/cart-sidebar'
 import { settingActions } from '@redux/setting.redux'
 import ProductDataMock from '@resources/mock/products.mock.json'
+import MainLayout from '@layouts/MainLayout'
 
 
 export default function Home() {
@@ -18,27 +19,8 @@ export default function Home() {
 
 
   return (
-    <>
-      <header className="h-[70px] flex items-center" >
-        <div className="container">
-          <div className="flex items-center justify-between">
-            <div className="logo">
-              <LogoImage width={200} height={50} />
-            </div>
-            <nav className="flex items-center gap-8">
-              <a href="#" className="text-lg" >
-                <span>Liên hệ</span>
-              </a>
-              <button className="bg-emerald-500 text-white font-semibold py-2 px-4 rounded-md" >
-                Đăng nhập
-              </button>
-              <button className="bg-white rounded-full" >
-                <i className="fa-light fa-circle-user text-4xl text-emerald-500 bg-white"></i>
-              </button>
-            </nav>
-          </div>
-        </div>
-      </header>
+    <MainLayout>
+
 
       <a onClick={() => dispatch(settingActions.openCartSidebar())} role="button" className="flex bg-emerald-500 p-3 w-fit gap-2 justify-center items-center flex-col rounded-l-md fixed z-40 top-1/2 right-0 transition-all duration-300 hover:bg-emerald-600">
         <span className="text-sm w-full flex justify-between items-center gap-2 text-white font-medium" >
@@ -50,7 +32,7 @@ export default function Home() {
       </a>
 
       {/* Cart */}
-      <CartSidebar/>
+      <CartSidebar />
 
       <main>
         <section className=''
@@ -102,7 +84,7 @@ export default function Home() {
             <div className="col-span-full">
               <div className="p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                  {ProductDataMock.map((product, index)=>(
+                  {ProductDataMock.map((product, index) => (
                     <div key={index} className="col-span-1">
                       <CardProduct
                         name={product.name}
@@ -118,6 +100,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-    </>
+    </MainLayout>
   )
 }
