@@ -25,14 +25,14 @@
       "@layouts/*": [
         "./src/layouts//*"
       ],
-      "@actions/*": [
-        "src/redux/actions/*"
+      "@models/*": [
+        "./src/models/*"
       ],
       "@utils/*": [
         "./src/utils/*"
       ],
       "@redux/*": [
-        "src/redux/*"
+        "./src/redux/*"
       ],
       "@services/*": [
         "./src/services/*"

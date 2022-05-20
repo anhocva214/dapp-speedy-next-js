@@ -53,7 +53,13 @@ export default function Home() {
       <CartSidebar/>
 
       <main>
-        <section className=''  >
+        <section className=''
+          style={{
+            backgroundImage: 'url(https://pickbazar-react-rest.vercel.app/_next/image?url=https%3A%2F%2Fpickbazarlaravel.s3.ap-southeast-1.amazonaws.com%2F904%2Fgrocery.png&w=1920&q=75)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
           <div className="container">
             <div className="flex justify-center items-center full-screen-except-header relative">
               <div className="w-full flex flex-col items-center">
