@@ -3,7 +3,7 @@ module.exports = {
         ENDPOINT: process.env.ENDPOINT
     },
     images: {
-        domains: ["res.cloudinary.com"],
+        domains: ["res.cloudinary.com", "suckhoedoisong.qltns.mediacdn.vn", 'pickbazar-react-rest.vercel.app'],
     },
     // webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     //     // Important: return the modified config

@@ -20,11 +20,12 @@ export async function baseApi<T>({path, method, headers, data, endpoint}: IPrams
             method,
             headers:{
                 Authorization: 'Bearer ' + cookie.load('access_token'), 
+                'Accept-Language': 'vi',
                 ...headers
             },
             data
         }).then(({data})=>{
             resolve(data)
-        }).catch(e => reject(e))
+        }).catch(e => reject(e.response))
     })
 }

@@ -1,32 +1,65 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from 'src/redux/reducer'
-import { User } from 'src/models/response/user.model'
+import { RootState } from '@redux/reducer'
 import { AppThunk } from '.';
 import { userApi } from '@apis/exports';
+import Router from 'next/router';
+import { routes } from '@utils/routes';
+import { IErrorsResponse } from 'src/models/errors-response';
+import { User, UserLoginDTO, UserRegisterDTO } from '@models/user.model';
+import { alertActions } from './alert.redux';
+import cookie from 'react-cookies'
 
 export interface UserState {
-    users: User[];
-    getUsersLoading: boolean
+    isLoadingRegister: boolean;
+    user: User;
+    errorsResponse: IErrorsResponse;
+    isLoadingLogin: boolean;
+    authenticated: boolean;
 }
 
 export const initialState: UserState = {
-    users: [],
-    getUsersLoading: false
+    isLoadingRegister: false,
+    user: null,
+    errorsResponse: {},
+    isLoadingLogin: false,
+    authenticated: false
 }
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        getUsersSuccess: (state, {payload}: PayloadAction<User[]>) => {
-            state.users = payload;
-            state.getUsersLoading = false;
+        // Register new user
+        loadingRegister: (state) => {
+            state.isLoadingRegister = true;
         },
-        loadingGetUsers: (state) =>{
-            state.getUsersLoading = true
+        registerNewUserSuccess: (state) => {
+            state.isLoadingRegister = false;
+            Router.push(routes.login);
         },
-        getUsersFail: (state) => {
-            state.getUsersLoading = false
+        registerNewUserFail: (state, { payload }: PayloadAction<IErrorsResponse>) => {
+            state.isLoadingRegister = false;
+            state.errorsResponse = payload
+        },
+        // Login
+        loadingLogin: (state) => {
+            state.isLoadingLogin = true;
+        },
+        loginSuccess: (state, { payload }: PayloadAction<User>) => {
+            state.isLoadingLogin = false;
+            state.user = payload;
+            state.authenticated = true;
+            Router.push(routes.home)
+        },
+        loginFail: (state, { payload }: PayloadAction<IErrorsResponse>) => {
+            state.isLoadingLogin = false;
+            state.errorsResponse = payload;
+            state.authenticated = false;
+        },
+        // Authenticate
+        authenticateSuccess: (state, { payload }: PayloadAction<User>) => {
+            state.user = payload;
+            state.authenticated = true;
         }
     },
 })
@@ -39,18 +72,49 @@ export const actions = userSlice.actions
 /*------- ACTIONS ----------*/
 /*--------------------------*/
 
-const getUsers = (): AppThunk => async (dispatch) => {
-    dispatch(actions.loadingGetUsers())
-    try{
-        let users: User[] = await userApi.getUsers()
-        dispatch(actions.getUsersSuccess(users.map(user => new User(user))))
+const registerNewUser = (data: UserRegisterDTO): AppThunk => async (dispatch) => {
+    try {
+        dispatch(actions.loadingRegister())
+        let response = await userApi.register(data)
+        dispatch(actions.registerNewUserSuccess())
+        dispatch(alertActions.success(response.message))
     }
-    catch(e){   
-        console.log(e)
-        dispatch(actions.getUsersFail())
+    catch (err) {
+        console.log(err)
+        if (!!err?.data?.errors)
+            dispatch(actions.registerNewUserFail(err?.data?.errors))
+    }
+}
+
+const login = (data: UserLoginDTO): AppThunk => async (dispatch) => {
+    try {
+        dispatch(actions.loadingLogin())
+        let response = await userApi.login(data)
+        dispatch(actions.loginSuccess(response.user))
+        dispatch(alertActions.success(response.message))
+        cookie.save('access_token', response.token.access_token, {path: '/', maxAge: response.token.expires_in })
+    }
+    catch (err) {
+        console.log(err)
+        if (!!err?.data)
+            dispatch(actions.loginFail(err?.data?.errors || {}))
+        if (!!err?.data?.message)
+            dispatch(alertActions.error(err?.data?.message))
+    }
+}
+
+const authenticate = (): AppThunk => async (dispatch) => {
+    try{
+        let user = await userApi.authenticate()
+        dispatch(actions.authenticateSuccess(user))
+    }
+    catch (err) {
+        console.log(err)
     }
 }
 
 export const userActions = {
-    getUsers
+    registerNewUser,
+    login,
+    authenticate
 }

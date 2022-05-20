@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Apples",
+        "imageUrl": "https://pickbazar-react-rest.vercel.app/_next/image?url=https%3A%2F%2Fpickbazarlaravel.s3.ap-southeast-1.amazonaws.com%2F1%2FApples.jpg&w=1920&q=75",
+        "price": 1.6
+    },
+    {
+        "name": "Baby Spinach",
+        "imageUrl": "https://pickbazar-react-rest.vercel.app/_next/image?url=https%3A%2F%2Fpickbazarlaravel.s3.ap-southeast-1.amazonaws.com%2F2%2FBabySpinach.jpg&w=1920&q=75",
+        "price": 0.6
+    },
+    {
+        "name": "Baby Spinach",
+        "imageUrl": "https://pickbazar-react-rest.vercel.app/_next/image?url=https%3A%2F%2Fpickbazarlaravel.s3.ap-southeast-1.amazonaws.com%2F579%2FBluberries-2.png&w=640&q=75",
+        "price": 3
+    }
+]
