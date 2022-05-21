@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'src/redux/reducer'
 import { AppThunk } from '.';
 import Web3 from 'web3'
+import { alertActions } from './alert.redux';
 
 export interface ContractCoinState {
     contractCoinAddress: string;
@@ -55,8 +56,11 @@ export const sendTransaction = (data: {
         console.log("Error send transaction: ", err)
         if (err.code == 4001){
             data.onDenied()
-        }else
-        data.onFailure()
+            dispatch(alertActions.error("Giao dịch đã từ chối"))
+        }else{
+            data.onFailure()
+            dispatch(alertActions.error("Giao dịch đã thất bại"))
+        }
     })
 }
 

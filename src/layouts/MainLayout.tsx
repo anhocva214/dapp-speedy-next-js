@@ -36,13 +36,16 @@ const MainLayout = (props: props) => {
                     dispatch(contractCoinActions.initWeb3({
                         web3
                     }))
+                    setTimeout(() => {
+                        if (authenticated) dispatch(userActions.getMyBalance({address: account}))
+                    }, 1000);
                 }
             }
             catch (e) {
                 console.log(e)
             }
         }
-    }, [status])
+    }, [status, authenticated])
 
     return (
         <>

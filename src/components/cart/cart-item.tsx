@@ -35,7 +35,7 @@ export default function CartItem(props: IProps) {
         <h5 className='font-bold text-sm flex'>
           {(props.item.amount * props.item.price).toFixed(3)} AH
         </h5>
-        <a role="button" className="w-6 h-6 bg-gray-100 flex justify-center items-center rounded-full hover:bg-red-500 text-zinc-500 hover:text-white transition-all duration-300">
+        <a onClick={() => dispatch(productActions.removeFullAmountFromCart(props.item))} role="button" className="w-6 h-6 bg-gray-100 flex justify-center items-center rounded-full hover:bg-red-500 text-zinc-500 hover:text-white transition-all duration-300">
           <i className="fa-solid fa-xmark text-xs"></i>
         </a>
       </div>

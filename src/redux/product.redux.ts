@@ -43,6 +43,12 @@ export const productSlice = createSlice({
             }
             else temp = state.cart.filter(item => item.name != payload.name);
             state.cart = temp
+        },
+        resetCart: (state) => {
+            state.cart = []
+        },
+        removeFullAmountFromCart: (state, {payload}: PayloadAction<ProductInCart>) => {
+            state.cart = state.cart.filter(item => item.name != payload.name)
         }
     },
 })
@@ -58,5 +64,7 @@ export const actions = productSlice.actions
 
 export const productActions = {
     addToCart: actions.addToCart,
-    removeFromCart: actions.removeFromCart
+    removeFromCart: actions.removeFromCart,
+    resetCart: actions.resetCart,
+    removeFullAmountFromCart: actions.removeFullAmountFromCart
 }
