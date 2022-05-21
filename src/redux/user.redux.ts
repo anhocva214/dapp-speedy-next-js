@@ -171,11 +171,9 @@ const receiveCoinFree = (data: {
             },
             onDenied: () => {
                 dispatch(actions.receiveCoinFreeFail())
-                dispatch(alertActions.error("Giao dịch đã từ chối"))
             },
             onFailure: () => {
                 dispatch(actions.receiveCoinFreeFail())
-                dispatch(alertActions.error("Giao dịch đã thất bại"))
             }
 
         }))
