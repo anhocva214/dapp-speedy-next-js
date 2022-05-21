@@ -8,6 +8,7 @@ import { IErrorsResponse } from 'src/models/errors-response';
 import { User, UserLoginDTO, UserRegisterDTO } from '@models/user.model';
 import { alertActions } from './alert.redux';
 import cookie from 'react-cookies'
+import { contractCoinActions } from './contract-coin.redux';
 
 export interface UserState {
     isLoadingRegister: boolean;
@@ -15,6 +16,9 @@ export interface UserState {
     errorsResponse: IErrorsResponse;
     isLoadingLogin: boolean;
     authenticated: boolean;
+    isLoadingReceiveCoinFree: boolean;
+    balance: number;
+    isLoadingMyBalance: boolean;
 }
 
 export const initialState: UserState = {
@@ -22,7 +26,10 @@ export const initialState: UserState = {
     user: null,
     errorsResponse: {},
     isLoadingLogin: false,
-    authenticated: false
+    authenticated: false,
+    isLoadingReceiveCoinFree: false,
+    balance: 0,
+    isLoadingMyBalance: false
 }
 
 export const userSlice = createSlice({
@@ -60,6 +67,27 @@ export const userSlice = createSlice({
         authenticateSuccess: (state, { payload }: PayloadAction<User>) => {
             state.user = payload;
             state.authenticated = true;
+        },
+        // My Balance
+        loadingMyBalance: (state) => {
+            state.isLoadingMyBalance = true;
+        },
+        getMyBalanceSuccess: (state, { payload }: PayloadAction<number>) => {
+            state.isLoadingMyBalance = false;
+            state.balance = payload;
+        },
+        getMyBalanceFail: (state) => {
+            state.isLoadingMyBalance = false;
+        },
+        // Receive coin free
+        loadingReceiveCoinFree: (state) => {
+            state.isLoadingReceiveCoinFree = true;
+        },
+        receiveCoinFreeSuccess: (state, { payload }: PayloadAction<number>) => {
+            state.isLoadingReceiveCoinFree = false;
+        },
+        receiveCoinFreeFail: (state) => {
+            state.isLoadingReceiveCoinFree = false;
         }
     },
 })
@@ -92,7 +120,7 @@ const login = (data: UserLoginDTO): AppThunk => async (dispatch) => {
         let response = await userApi.login(data)
         dispatch(actions.loginSuccess(response.user))
         dispatch(alertActions.success(response.message))
-        cookie.save('access_token', response.token.access_token, {path: '/', maxAge: response.token.expires_in })
+        cookie.save('access_token', response.token.access_token, { path: '/', maxAge: response.token.expires_in })
     }
     catch (err) {
         console.log(err)
@@ -104,7 +132,7 @@ const login = (data: UserLoginDTO): AppThunk => async (dispatch) => {
 }
 
 const authenticate = (): AppThunk => async (dispatch) => {
-    try{
+    try {
         let user = await userApi.authenticate()
         dispatch(actions.authenticateSuccess(user))
     }
@@ -113,8 +141,55 @@ const authenticate = (): AppThunk => async (dispatch) => {
     }
 }
 
+const getMyBalance = (data: {
+    address: string
+}): AppThunk => async (dispatch) => {
+    try {
+        dispatch(actions.loadingMyBalance())
+        let balance = await userApi.myBalance(data)
+        dispatch(actions.getMyBalanceSuccess(parseFloat(balance)))
+    }
+    catch (err) {
+        console.log(err)
+        dispatch(actions.getMyBalanceFail())
+    }
+}
+
+const receiveCoinFree = (data: {
+    address: string
+}): AppThunk => async (dispatch) => {
+    try {
+        dispatch(actions.loadingReceiveCoinFree())
+        let response = await userApi.receiveCoinFree(data)
+        dispatch(contractCoinActions.sendTransaction({
+            myAddress: data.address,
+            dataEncodeABI: response.encodeABI,
+            onSuccess: () => {
+                dispatch(actions.receiveCoinFreeSuccess())
+                dispatch(userActions.getMyBalance(data))
+                dispatch(alertActions.success(`Bạn đã nhận được ${response.amount} AH `))
+            },
+            onDenied: () => {
+                dispatch(actions.receiveCoinFreeFail())
+                dispatch(alertActions.error("Giao dịch đã từ chối"))
+            },
+            onFailure: () => {
+                dispatch(actions.receiveCoinFreeFail())
+                dispatch(alertActions.error("Giao dịch đã thất bại"))
+            }
+
+        }))
+    }
+    catch (err) {
+        console.log(err)
+        dispatch(actions.receiveCoinFreeFail())
+    }
+}
+
 export const userActions = {
     registerNewUser,
     login,
-    authenticate
+    authenticate,
+    getMyBalance,
+    receiveCoinFree
 }
