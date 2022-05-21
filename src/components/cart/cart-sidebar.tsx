@@ -1,3 +1,4 @@
+import { productSelector } from "@redux/product.redux";
 import { settingActions, settingSelector } from "@redux/setting.redux";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "./cart-item";
@@ -6,6 +7,7 @@ import CartItem from "./cart-item";
 export default function CartSidebar() {
     const dispatch = useDispatch()
     const {cartSidebarToggle} = useSelector(settingSelector)
+    const {cart} = useSelector(productSelector)
 
     return (
         <>
@@ -21,9 +23,11 @@ export default function CartSidebar() {
                 </div>
                 {/* Cart content */}
                 <div className='h-full mb-5 overflow-y-auto'>
-                    <div className='py-3 border-b px-5'>
-                        <CartItem/>
-                    </div>
+                    {cart.map((item, index) => (
+                        <div key={item.name} className='py-3 border-b px-5'>
+                            <CartItem item={item} />
+                        </div>
+                    ))}
                 </div>
                 {/* Cart footer */}
                 <div className="px-5 pb-5">

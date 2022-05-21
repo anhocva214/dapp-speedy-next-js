@@ -10,7 +10,7 @@
         "price": 0.6
     },
     {
-        "name": "Baby Spinach",
+        "name": "Blueberries",
         "imageUrl": "https://pickbazar-react-rest.vercel.app/_next/image?url=https%3A%2F%2Fpickbazarlaravel.s3.ap-southeast-1.amazonaws.com%2F579%2FBluberries-2.png&w=640&q=75",
         "price": 3
     }
