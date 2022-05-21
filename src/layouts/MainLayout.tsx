@@ -1,9 +1,13 @@
+import Header from '@components/header';
 import LogoImage from '@components/header/logo-image';
 import { userActions, userSelector } from '@redux/user.redux';
 import { routes } from '@utils/routes';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMetaMask } from "metamask-react";
+import Web3 from 'web3'
+import { contractCoinActions } from '@redux/contract-coin.redux';
 
 type props = {
     children: ReactNode
@@ -13,6 +17,7 @@ type props = {
 const MainLayout = (props: props) => {
     const router = useRouter()
     const dispatch = useDispatch()
+    const { status, connect, account, chainId, ethereum } = useMetaMask();
 
     const { authenticated, user } = useSelector(userSelector)
 
@@ -20,33 +25,28 @@ const MainLayout = (props: props) => {
         dispatch(userActions.authenticate())
     }, [])
 
+    useEffect(() => {
+        if (status == 'connected') {
+            try {
+                let Window: any = window;
+                let web3 = new Web3(Window.web3.currentProvider)
+                let provider: any = web3.currentProvider
+                // console.log("provider: ",provider)
+                if (provider?.isMetaMask == true) {
+                    dispatch(contractCoinActions.initWeb3({
+                        web3
+                    }))
+                }
+            }
+            catch (e) {
+                console.log(e)
+            }
+        }
+    }, [status])
+
     return (
         <>
-            <header className="h-[70px] flex items-center" >
-                <div className="container">
-                    <div className="flex items-center justify-between">
-                        <div className="logo">
-                            <LogoImage width={200} height={50} />
-                        </div>
-                        <nav className="flex items-center gap-8">
-                            <a href="#" className="text-lg" >
-                                <span>Liên hệ</span>
-                            </a>
-                            {authenticated ? (
-                                <button className="bg-white rounded-full" >
-                                    <i className="fa-light fa-circle-user text-4xl text-emerald-500 bg-white"></i>
-                                </button>
-                            ) : (
-                                <button onClick={() => router.push(routes.login)} className="bg-emerald-500 text-white font-semibold py-2 px-4 rounded-md" >
-                                    Đăng nhập
-                                </button>
-                            )}
-
-
-                        </nav>
-                    </div>
-                </div>
-            </header>
+            <Header/>
             {props.children}
 
         </>

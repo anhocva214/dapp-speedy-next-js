@@ -40,3 +40,26 @@ export const authenticate = () => {
         method: 'GET'
     })
 }
+
+export const receiveCoinFree = (data: {
+    address: string
+}) => {
+    return baseApi<{
+        encodeABI: string,
+        amount: number
+    }>({
+        path: paths.receiveCoinFree,
+        method: 'POST',
+        data
+    })
+}
+
+export const myBalance = (data: {
+    address: string
+})=>{
+    return baseApi<string>({
+        path: paths.getMyBalance,
+        method: 'POST',
+        data
+    })
+}
